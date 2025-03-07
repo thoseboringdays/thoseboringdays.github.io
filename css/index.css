@@ -202,23 +202,38 @@ body {
 
 /* 小屏幕下调整布局 */
 @media (max-width: 600px) {
+  #gameOver {
+    width: 75%;
+  }
+
   .asteroid {
     width: 120px;
+    font-size: 14px;
   }
   
   #scene {
-    font-size: 20px;
+    font-size: 16px;
   }
 
   #notice {
-    font-size: 20px;
+    font-size: 16px;
   }
   
   #score {
-    font-size: 20px;
+    font-size: 16px;
   }
 
   #timer {
-    font-size: 20px;
+    font-size: 16px;
+  }
+
+  #card {
+    font-size: 14px;
+  }
+
+  #target {
+    width: 100px;
+    height: 100px;
+    padding: 20px;
   }
 }

@@ -10,6 +10,11 @@ let score = 0;
 let gameActive = true;
 let timeLeft = 30;
 
+let lastUpdate = 0;
+const FPS_LIMIT = 60;
+const FRAME_DELAY = 1000 / FPS_LIMIT;   // 添加帧率控制变量
+const MAX_BULLETS = 50; // 在全局定义子弹池上限
+
 // 对象池
 const bulletPool = [];
 const sparkPool = [];
@@ -26,6 +31,8 @@ function getGunPosition() {
 
 // 创建子弹
 function shoot() {
+    if (bulletPool.length >= MAX_BULLETS) return; // 限制数量
+
     let bullet = bulletPool.find(b => !b.active);
     if (!bullet) {
         bullet = document.createElement('div');
@@ -34,6 +41,8 @@ function shoot() {
         bulletPool.push(bullet);
     }
 
+    // 重置状态
+    bullet.style.display = 'block';
     const { x, y } = getGunPosition();
     bullet.style.left = x + 'px';
     bullet.style.top = y + 'px';
@@ -41,33 +50,55 @@ function shoot() {
 }
 
 // 子弹运动逻辑
-function updateBullets() {
+function updateBullets(timestamp) {
     if (!gameActive) return;
 
+    // 帧率控制
+    if (timestamp - lastUpdate < FRAME_DELAY) {
+        requestAnimationFrame(updateBullets);
+        return;
+    }
+    lastUpdate = timestamp;
+    
     bulletPool.forEach((bullet) => {
-        if (!bullet.active) return;
+        if (!bullet.active) {
+            bullet.style.display = 'none';
+            return;
+        }
 
         const top = parseFloat(bullet.style.top) || 0;
-        bullet.style.top = (top - 10) + 'px';
+        bullet.style.top = (top - 20) + 'px';
 
-        // 检测子弹是否击中目标
+        // 先检测碰撞，再处理隐藏
+        let isHit = false;
+
+        // 目标碰撞检测
         if (checkCollision(bullet, target)) {
-            bullet.active = false;
             addScore(50, target);
+            isHit = true;
         }
 
-        // 检测子弹是否击中小行星
-        asteroidPool.forEach((asteroid) => {
+        // 小行星碰撞检测
+        for (let i = asteroidPool.length - 1; i >= 0; i--) {
+            const asteroid = asteroidPool[i];
             if (asteroid.active && checkCollision(bullet, asteroid)) {
-                bullet.active = false;
+                if (asteroid.isBoss) {
+                    gameActive = false;
+                    showGameOver("你激怒了总裁！", true);
+                    return;
+                }
                 addScore(-200, asteroid);
+                isHit = true;
+                break;
             }
-        });
-
-        // 移出屏幕后重置
-        if (top < -20) {
-            bullet.active = false;
         }
+
+        // 边界检测或碰撞后隐藏
+        if (top < 100 || isHit) {
+            bullet.active = false;
+            bullet.style.display = 'none';
+        }
+
     });
 
     requestAnimationFrame(updateBullets);
@@ -105,7 +136,7 @@ function addScore(points, target) {
     // 提示文案0.5秒后消失
     setTimeout(() => {
         feedback.remove();
-    }, 500);
+    }, 300);
 
     // 分数为负时的特殊处理
     if (score <= 0) {
@@ -126,25 +157,32 @@ function createAsteroid() {
     if (!asteroid) {
         asteroid = document.createElement('div');
         asteroid.className = 'asteroid';
-        asteroid.textContent = '领导经过 ...';
         asteroidBelt.appendChild(asteroid);
         asteroidPool.push(asteroid);
+    }
+
+    // 随机生成总裁或普通领导
+    const isBoss = Math.random() < 0.1;
+    if (isBoss) {
+        asteroid.textContent = '总裁经过 ...';
+        asteroid.style.backgroundColor = '#FF0000';
+        asteroid.isBoss = true;
+    } else {
+        asteroid.textContent = '领导经过 ...';
+        asteroid.style.backgroundColor = '#607D8B';
+        asteroid.isBoss = false;
     }
 
     let positionValid = false;
     let newTop, newLeft;
 
-    // 确保小行星的位置不与其他小行星重叠
     while (!positionValid) {
-        // 随机生成一个新的位置
         newTop = Math.random() * 250;
         newLeft = '100%';
 
-        // 检查新的位置是否与已有的小行星位置重叠
         positionValid = !asteroidPositions.some(position => 
-            Math.abs(position.top - newTop) < 60);  // 60px为避免重叠的距离
+            Math.abs(position.top - newTop) < 60);
 
-        // 如果没有重叠，则记录新的位置
         if (positionValid) {
             asteroidPositions.push({ top: newTop, left: newLeft });
         }
@@ -154,11 +192,9 @@ function createAsteroid() {
     asteroid.style.left = newLeft;
     asteroid.active = true;
 
-    // 设置小行星的有效期
     const asteroidDuration = window.innerWidth < 600 ? 1000 : 6000;
     setTimeout(() => {
         asteroid.active = false;
-        // 清理已失效的小行星位置
         const index = asteroidPositions.findIndex(position => position.top === newTop);
         if (index !== -1) {
             asteroidPositions.splice(index, 1);
@@ -167,13 +203,15 @@ function createAsteroid() {
 }
 
 // 显示游戏结束弹窗
-function showGameOver(message) {
+function showGameOver(message, isBoss = false) {
     finalScoreElement.textContent = score;
+    const showShare = !isBoss && score > 0;
+    
     gameOverElement.innerHTML = `
         <h2>游戏结束</h2>
         <p>${message}</p>
         <button onclick="location.reload()">再玩一次</button>
-        ${score > 0 ? '<button id="shareButton">分享成绩</button>' : ''}
+        ${showShare ? '<button id="shareButton">分享成绩</button>' : ''}
     `;
     gameOverElement.style.display = 'block';
 
@@ -207,10 +245,30 @@ function startTimer() {
     }, 1000);
 }
 
+// 定义轮播数组
+const messages = [
+    "“ 这个需求我真的做不了 ”",
+    "“ 这个至少要排 10PD ”",
+    "“ 现在很忙，晚点帮你看 ”",
+    "“ 这个找热线看，我不查 ”",
+    "“ 你这个改动太复杂了，走变更吧 ”"
+];
+
+let currentMessageIndex = 0;
+
+// 更新顶部文案
+function updateSceneMessage() {
+    const sceneElement = document.getElementById('scene');
+    sceneElement.textContent = messages[currentMessageIndex];
+    currentMessageIndex = (currentMessageIndex + 1) % messages.length;
+}
+
 // 启动游戏
 startTimer();
+updateSceneMessage();
 const asteroidInterval = setInterval(createAsteroid, 2500);
 const animationFrame = requestAnimationFrame(updateBullets);
+setInterval(updateSceneMessage, 2000); // 每2秒切换一次文案
 
 // 键盘事件监听
 let shootInterval;

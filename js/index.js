@@ -24,8 +24,8 @@ const asteroidPool = [];
 function getGunPosition() {
     const rect = player.getBoundingClientRect();
     return {
-        x: rect.left + rect.width * 0.8,
-        y: rect.top
+        x: rect.left + rect.width * 0.85,
+        y: rect.top - rect.height * 0.6
     };
 }
 
@@ -245,29 +245,29 @@ function startTimer() {
 
 // 定义轮播数组
 const messages = [
-    "“ 你这个需求我做不了 ”",
-    "“ 这个至少要排 10PD ”",
-    "“ 让 QA 测吧，我懒得点了 ”",
-    "“ 现在很忙，晚点帮你看 ”",
-    "“ 这个找热线看，我不查 ”",
-    "“ 改动太复杂了，走变更吧 ”"
+    "\" 你这个需求我做不了 \"",
+    "\" 这个至少要排 10 PD \"",
+    "\" 让 QA 测吧, 懒得点了 \"",
+    "\" 现在很忙, 晚点帮你看 \"",
+    "\" 这个找热线看, 我不查 \"",
+    "\" 太复杂了, 走变更吧 \""
 ];
 
 let currentMessageIndex = 0;
 
 // 更新顶部文案
-function updateSceneMessage() {
-    const sceneElement = document.getElementById('scene');
+function updateTalksMessage() {
+    const sceneElement = document.getElementById('talks');
     sceneElement.textContent = messages[currentMessageIndex];
     currentMessageIndex = (currentMessageIndex + 1) % messages.length;
 }
 
 // 启动游戏
 startTimer();
-updateSceneMessage();
+updateTalksMessage();
 const asteroidInterval = setInterval(createAsteroid, 3000);
 const animationFrame = requestAnimationFrame(updateBullets);
-setInterval(updateSceneMessage, 3000);
+setInterval(updateTalksMessage, 3000);
 
 // 键盘事件监听
 let shootInterval;

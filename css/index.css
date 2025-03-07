@@ -24,6 +24,7 @@ body {
   height: 40px;
   background: #fff;
   border-radius: 50%;
+  z-index: 100;
 }
 
 /* 枪的样式 */
@@ -34,8 +35,9 @@ body {
   background: #666;
   top: 15px;
   left: 35px;
-  transform: rotate(-30deg);
+  transform: rotate(-90deg);
   transform-origin: left center;
+  border: solid 2px #333;
 }
 
 /* 子弹样式 */
@@ -48,8 +50,9 @@ body {
 }
 
 /* 背景信息样式 */
-#scene {
+#talks {
   position: absolute;
+  width: auto;
   top: 30px;
   left: 50%;
   font-size: 24px;
@@ -218,8 +221,9 @@ body {
     animation: asteroidMove 3s linear infinite;
   }
   
-  #scene {
+  #talks {
     font-size: 16px;
+    top: 20px;
   }
 
   #notice {
@@ -228,10 +232,14 @@ body {
   
   #score {
     font-size: 16px;
+    top: 20px;
+    left: 15px;
   }
 
   #timer {
     font-size: 16px;
+    top: 20px;
+    right: 15px;
   }
 
   #card {

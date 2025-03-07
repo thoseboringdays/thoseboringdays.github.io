@@ -1,3 +1,9 @@
+* {
+  user-select: none; 
+  -webkit-user-drag: none; /* 禁止拖拽 */
+  user-drag: none; 
+}
+
 /* 全屏灰色背景 */
 body {
   margin: 0 auto;

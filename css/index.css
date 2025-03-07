@@ -209,6 +209,7 @@ body {
   .asteroid {
     width: 120px;
     font-size: 14px;
+    animation: asteroidMove 3s linear infinite;
   }
   
   #scene {

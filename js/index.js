@@ -154,7 +154,8 @@ function createAsteroid() {
     asteroid.style.left = newLeft;
     asteroid.active = true;
 
-    // 设置小行星的有效期，6秒后失效
+    // 设置小行星的有效期
+    const asteroidDuration = window.innerWidth < 600 ? 1000 : 6000;
     setTimeout(() => {
         asteroid.active = false;
         // 清理已失效的小行星位置
@@ -162,7 +163,7 @@ function createAsteroid() {
         if (index !== -1) {
             asteroidPositions.splice(index, 1);
         }
-    }, 6000);
+    }, asteroidDuration);
 }
 
 // 显示游戏结束弹窗

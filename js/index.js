@@ -87,14 +87,14 @@ function updateBullets(timestamp) {
                     showGameOver("你激怒了总裁！", true);
                     return;
                 }
-                addScore(-200, asteroid);
+                addScore(-100, asteroid);
                 isHit = true;
                 break;
             }
         }
 
         // 边界检测或碰撞后隐藏
-        if (top < 100 || isHit) {
+        if (top < 80 || isHit) {
             bullet.active = false;
             bullet.style.display = 'none';
         }
@@ -161,45 +161,43 @@ function createAsteroid() {
         asteroidPool.push(asteroid);
     }
 
-    // 随机生成总裁或普通领导
-    const isBoss = Math.random() < 0.1;
-    if (isBoss) {
-        asteroid.textContent = '总裁经过 ...';
-        asteroid.style.backgroundColor = '#FF0000';
-        asteroid.isBoss = true;
-    } else {
-        asteroid.textContent = '领导经过 ...';
-        asteroid.style.backgroundColor = '#607D8B';
-        asteroid.isBoss = false;
-    }
-
-    let positionValid = false;
-    let newTop, newLeft;
-
-    while (!positionValid) {
-        newTop = Math.random() * 250;
-        newLeft = '100%';
-
-        positionValid = !asteroidPositions.some(position => 
-            Math.abs(position.top - newTop) < 60);
-
-        if (positionValid) {
-            asteroidPositions.push({ top: newTop, left: newLeft });
-        }
-    }
-
-    asteroid.style.top = `${newTop}px`;
-    asteroid.style.left = newLeft;
+    // 重置小行星状态
+    const isBoss = Math.random() < 0.05;
+    asteroid.textContent = isBoss ? '总裁经过 ...' : '领导经过 ...';
+    asteroid.style.backgroundColor = isBoss ? '#FF0000' : '#607D8B';
+    asteroid.isBoss = isBoss;
     asteroid.active = true;
 
-    const asteroidDuration = window.innerWidth < 600 ? 1000 : 6000;
-    setTimeout(() => {
+    // 生成随机参数
+    const duration = Math.random() * 2 + 3; // 3-5秒
+    let positionValid = false;
+    let newTop;
+
+    // 位置冲突检测
+    while (!positionValid) {
+        newTop = Math.random() * 250;
+        positionValid = !asteroidPositions.some(position => 
+            Math.abs(position.top - newTop) < 60);
+    }
+
+    // 强制重置位置和动画
+    asteroid.style.animation = 'none';
+    asteroid.style.left = '100%';
+    asteroid.style.top = `${newTop}px`;
+    void asteroid.offsetWidth; // 触发重绘
+
+    // 应用新动画
+    asteroid.style.animation = `asteroidMove ${duration}s linear forwards`;
+    asteroidPositions.push({ top: newTop });
+
+    // 动画结束处理
+    const onAnimationEnd = () => {
         asteroid.active = false;
-        const index = asteroidPositions.findIndex(position => position.top === newTop);
-        if (index !== -1) {
-            asteroidPositions.splice(index, 1);
-        }
-    }, asteroidDuration);
+        const index = asteroidPositions.findIndex(p => p.top === newTop);
+        if (index !== -1) asteroidPositions.splice(index, 1);
+        asteroid.removeEventListener('animationend', onAnimationEnd);
+    };
+    asteroid.addEventListener('animationend', onAnimationEnd, { once: true });
 }
 
 // 显示游戏结束弹窗
@@ -218,7 +216,7 @@ function showGameOver(message, isBoss = false) {
     if (score > 0) {
         const shareButton = document.getElementById('shareButton');
         shareButton.addEventListener('click', () => {
-            const shareText = `我在痛扁陈涛大赛中取得了 ${score} 分的好成绩，你最好小心点`;
+            const shareText = `我在狂扁陈涛小游戏中取得了 ${score} 分的好成绩，你最好小心点`;
             navigator.clipboard.writeText(shareText).then(() => {
                 alert('分享信息已拷贝至剪切板，去飞书发送给陈涛吧～');
             });
@@ -266,9 +264,9 @@ function updateSceneMessage() {
 // 启动游戏
 startTimer();
 updateSceneMessage();
-const asteroidInterval = setInterval(createAsteroid, 2500);
+const asteroidInterval = setInterval(createAsteroid, 3000);
 const animationFrame = requestAnimationFrame(updateBullets);
-setInterval(updateSceneMessage, 2000); // 每2秒切换一次文案
+setInterval(updateSceneMessage, 3000);
 
 // 键盘事件监听
 let shootInterval;

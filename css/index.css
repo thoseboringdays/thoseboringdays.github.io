@@ -124,7 +124,7 @@ body {
   height: 50px;
   background: #607D8B;
   border-radius: 10px;
-  animation: asteroidMove 5s linear infinite;
+  animation-fill-mode: forwards;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -133,8 +133,8 @@ body {
 }
 
 @keyframes asteroidMove {
-  0% { left: 100%; }
-  100% { left: -10%; }
+  from { left: 100%; }
+  to { left: -200px; }
 }
 
 #score {

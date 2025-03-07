@@ -1,0 +1,224 @@
+/* 全屏灰色背景 */
+body {
+  margin: 0 auto;
+  padding: 0;
+  background: #333;
+  overflow: hidden;
+  height: auto;
+  font-family: Arial, sans-serif;
+}
+
+/* 玩家角色 */
+#player {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border-radius: 50%;
+}
+
+/* 枪的样式 */
+#gun {
+  position: absolute;
+  width: 50px;
+  height: 10px;
+  background: #666;
+  top: 15px;
+  left: 35px;
+  transform: rotate(-30deg);
+  transform-origin: left center;
+}
+
+/* 子弹样式 */
+.bullet {
+  width: 4px;
+  height: 10px;
+  background: yellow;
+  position: absolute;
+  border-radius: 2px;
+}
+
+/* 背景信息样式 */
+#scene {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  font-size: 24px;
+  color: white;
+  transform: translateX(-50%);
+}
+
+/* 提示文案样式 */
+#notice {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  font-size: 24px;
+  color: white;
+  transform: translateX(-50%);
+}
+
+/* 目标对象 */
+#target {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+  animation: targetBlink 1s infinite, targetMove 5s linear infinite;
+  background-color: #FF5722;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  padding: 25px;
+  box-sizing: border-box;
+}
+
+#card {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+#image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+@keyframes targetBlink {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+@keyframes targetMove {
+  0% { left: 10%; }
+  50% { left: 90%; }
+  100% { left: 10%; }
+}
+
+/* 小行星带区域 */
+#asteroidBelt {
+  position: absolute;
+  top: 30%;
+  left: 0;
+  width: 100%;
+  height: 20px;
+}
+
+/* 小行星 */
+.asteroid {
+  position: absolute;
+  width: 200px;
+  height: 50px;
+  background: #607D8B;
+  border-radius: 10px;
+  animation: asteroidMove 5s linear infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+}
+
+@keyframes asteroidMove {
+  0% { left: 100%; }
+  100% { left: -10%; }
+}
+
+#score {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  color: white;
+  font-size: 24px;
+}
+
+/* 分数提示 */
+.score-feedback {
+  position: absolute;
+  font-size: 24px;
+  font-weight: bold;
+  pointer-events: none;
+  animation: floatUp 0.5s ease-out;
+}
+
+@keyframes floatUp {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-50px); }
+}
+
+/* 游戏结束弹窗 */
+#gameOver {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  width: 25%;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  display: none;
+  z-index: 999;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+#gameOver button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#gameOver button:hover {
+  background: #45a049;
+}
+
+/* 时间显示 */
+#timer {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  color: white;
+  font-size: 24px;
+}
+
+/* 小屏幕下调整布局 */
+@media (max-width: 600px) {
+  .asteroid {
+    width: 120px;
+  }
+  
+  #scene {
+    font-size: 20px;
+  }
+
+  #notice {
+    font-size: 20px;
+  }
+  
+  #score {
+    font-size: 20px;
+  }
+
+  #timer {
+    font-size: 20px;
+  }
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>维亚大作战</title>
+    <link rel="icon" href="images/favicon.png" type="image/png">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <!-- 玩家角色 -->
+    <div id="player">
+        <div id="gun"></div>
+    </div>
+
+    <!-- 场景信息 -->
+    <div id="scene">
+       苏州街 维亚大厦 八楼
+    </div>
+
+    <!-- 操作提醒 -->
+    <div id="notice">
+      （点击或空格发射子弹）
+    </div>
+
+    <!-- 目标对象 -->
+    <div id="target">
+      <div id="card">
+        陈涛 C34-5
+      </div>
+      <img  id="image" src="./images/avatar.jpg" alt="Target" />
+    </div>
+
+    <!-- 小行星带区域 -->
+    <div id="asteroidBelt"></div>
+
+    <!-- 分数显示 -->
+    <div id="score">得分: 0</div>
+
+    <!-- 时间显示 -->
+    <div id="timer">时间: 30</div>
+
+    <!-- 游戏结束弹窗 -->
+    <div id="gameOver">
+        <h2>时间到！</h2>
+        <p>您取得了 <span id="finalScore">0</span> 分的好成绩！</p>
+        <button onclick="location.reload()">再玩一次</button>
+        <button id="shareButton" style="display: none;">分享成绩</button>
+    </div>
+
+    <script src="js/index.js"></script>
+</body>
+</html>

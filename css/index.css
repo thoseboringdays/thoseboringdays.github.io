@@ -117,8 +117,8 @@ body {
   100% { left: 10%; }
 }
 
-/* 小行星带区域 */
-#asteroidBelt {
+/* 领导带区域 */
+#leaderBelt {
   position: absolute;
   top: 30%;
   left: 0;
@@ -126,8 +126,8 @@ body {
   height: 20px;
 }
 
-/* 小行星 */
-.asteroid {
+/* 领导 */
+.leader {
   position: absolute;
   width: 200px;
   height: 50px;
@@ -141,7 +141,7 @@ body {
   font-size: 20px;
 }
 
-@keyframes asteroidMove {
+@keyframes leaderMove {
   from { left: 100%; }
   to { left: -200px; }
 }
@@ -215,10 +215,10 @@ body {
     width: 75%;
   }
 
-  .asteroid {
+  .leader {
     width: 120px;
     font-size: 14px;
-    animation: asteroidMove 3s linear infinite;
+    animation: leaderMove 3s linear infinite;
   }
   
   #talks {

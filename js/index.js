@@ -216,7 +216,7 @@ function showGameOver(message, isBoss = false) {
     if (score > 0) {
         const shareButton = document.getElementById('shareButton');
         shareButton.addEventListener('click', () => {
-            const shareText = `我在维亚大作战中取得了 ${score} 分的好成绩，你最好小心点`;
+            const shareText = `我在狂扁陈涛小游戏中取得了 ${score} 分的好成绩，你最好小心点`;
             navigator.clipboard.writeText(shareText).then(() => {
                 alert('分享信息已拷贝至剪切板，去发送给陈涛吧～');
             });

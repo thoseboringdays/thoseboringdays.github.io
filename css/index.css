@@ -70,6 +70,15 @@ body {
   transform: translateX(-50%);
 }
 
+#version {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  font-size: 18px;
+  color: whitesmoke;
+  transform: translateX(-50%);
+}
+
 /* 目标对象 */
 #target {
   position: absolute;

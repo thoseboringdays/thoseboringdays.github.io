@@ -79,7 +79,7 @@ body {
   width: 150px;
   height: 150px;
   border-radius: 10px;
-  animation: targetBlink 1s infinite, targetMove 5s linear infinite;
+  animation: targetBlink 1s infinite, targetMove 4s linear infinite;
   background-color: #FF5722;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
